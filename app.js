@@ -11,8 +11,8 @@ app.get("/", function(req, res) {
 io.on("connection", function(socket) {
     console.log("A user has connected.");
 
-    socket.on("chat message", function(msg) {
-        io.emit('chat message', msg);
+    socket.on("chat message", function(msg, user) {
+        io.emit('chat message', user + ": " + msg);
     });
 
     socket.on("disconnect", function() {
