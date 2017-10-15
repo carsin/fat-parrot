@@ -22,13 +22,8 @@ io.sockets.on("connection", (socket) => {
     console.log("A user has connected. Total users: " + clientCount);
 
     socket.on("speak", (msg, user) => {
-        say.speak(msg + " from " + user, (err) => {
-            if (err) {
-                return console.error(err);
-            }
-
-            console.log(user + ": " + msg);
-        });
+        say.speak(msg.substring(0, 200));
+        console.log(msg + " from " + user)
     });
 
     socket.on("update usercount", () => {
