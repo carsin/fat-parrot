@@ -1,8 +1,14 @@
+// TTS
+const say = require("say");
+
+// Express
 const express = require("express");
 const app = express();
 app.set("view engine", "ejs");
-const socketio = require("socket.io");
 const http = require("http").Server(app);
+
+// Socket.io
+const socketio = require("socket.io");
 const io = socketio(http);
 
 var clientCount = 0;
@@ -15,8 +21,14 @@ io.sockets.on("connection", (socket) => {
     clientCount++;
     console.log("A user has connected. Total users: " + clientCount);
 
-    socket.on("chat message", (msg, user) => {
-        io.sockets.emit("chat message", user + ": " + msg);
+    socket.on("speak", (msg, user) => {
+        say.speak(msg + " from " + user, (err) => {
+            if (err) {
+                return console.error(err);
+            }
+
+            console.log(user + ": " + msg);
+        });
     });
 
     socket.on("update usercount", () => {
