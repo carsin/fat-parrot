@@ -35,6 +35,10 @@ io.sockets.on("connection", (socket) => {
         io.sockets.emit("update usercount", clientCount);
     });
 
+    socket.on("chat message", function(msg, user) {
+        io.emit('chat message', user + ": " + msg);
+    });
+
     socket.on("disconnect", () => {
         clientCount--;
         io.sockets.emit("update usercount", clientCount);
