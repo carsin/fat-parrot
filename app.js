@@ -11,6 +11,10 @@ const http = require("http").Server(app);
 const socketio = require("socket.io");
 const io = socketio(http);
 
+var sys = require('sys')
+var exec = require('child_process').exec;
+function puts(error, stdout, stderr) { sys.puts(stdout) }
+
 var clientCount = 0;
 
 app.get("/", (req, res) => {
@@ -22,7 +26,7 @@ io.sockets.on("connection", (socket) => {
     console.log("A user has connected. Total users: " + clientCount);
 
     socket.on("speak", (msg, user) => {
-        say.speak(msg.substring(0, 200));
+        exec("say " + msg.substring(0, 200), puts);
         console.log(msg + " from " + user)
     });
 
