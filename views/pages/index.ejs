@@ -16,23 +16,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        $(function() {
-            var socket = io();
-            var username = prompt("enter your username");
-            $("form").submit(function() {
+        $(() => {
+            var socket = io.connect();
+
+            $("form").submit(() => {
                 socket.emit("chat message", $("#m").val(), username);
                 $("#m").val("");
                 return false;
             });
 
-            socket.on("chat message", function(msg) {
+            socket.on("update usercount", (num) => {
+                $("#currentUsers").html(num);
+            });
+
+            socket.emit("update usercount");
+
+            socket.on("chat message", (msg) => {
                 $("#messages").append($("<li>").text(msg));
             });
+
+            var username = prompt("enter your username");
         });
 
     </script>
 </head>
 <body>
+    <div id="users">
+        <p>Users online: <span id="currentUsers"></span></p>
+    </div>
+
     <ul id="messages"></ul>
     <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
