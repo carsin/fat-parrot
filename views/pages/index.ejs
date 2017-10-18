@@ -18,24 +18,29 @@
     <script>
         $(() => {
             var socket = io.connect();
-
+            
+            // when user submits chat message
             $("form").submit(() => {
-                socket.emit("speak", $("#m").val(), username);
-                socket.emit("chat message", $("#m").val(), username);
+                socket.emit("speak", $("#m").val(), username); // tts event
+                socket.emit("chat message", $("#m").val(), username); // chat event
                 $("#m").val("");
                 return false;
             });
 
+            // usercount event
             socket.on("update usercount", (num) => {
                 $("#currentUsers").html(num);
             });
-
+            
+            // chat event
             socket.on("chat message", function(msg) {
                 $("#messages").append($("<li>").text(msg));
             });
+            
+            // tell server to update all usercounts
             socket.emit("update usercount");
 
-            var username = prompt("enter your username");
+            var username = prompt("enter your username"); // prompt user for name
         });
 
     </script>
