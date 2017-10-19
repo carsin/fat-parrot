@@ -24,6 +24,7 @@ io.sockets.on("connection", (socket) => {
     console.log("A user has connected. Total users: " + clientCount);
 
     // this section is broken rn.
+    // TODO: Add button to allow tts to be said on users computer.
     socket.on("speak", (msg, user) => {
         say.speak(msg.substring(0, 200), "Alex", 1.0, (err) => {
             if (err) {
