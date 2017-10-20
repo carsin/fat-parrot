@@ -1,5 +1,7 @@
 // TTS
-const say = require("say");
+// const say = require("say");
+var googleTTS = require("google-tts-api");
+var player = require("play-sound")(opts = {})
 
 // Express
 const express = require("express");
@@ -23,17 +25,8 @@ io.sockets.on("connection", (socket) => {
     clientCount++;
     console.log("A user has connected. Total users: " + clientCount);
 
-    // this section is broken rn.
     // TODO: Add button to allow tts to be said on users computer.
-    socket.on("speak", (msg, user) => {
-        say.speak(msg.substring(0, 200), "Alex", 1.0, (err) => {
-            if (err) {
-                console.error(err);
-            }
-            console.log(user + " said " + msg)
-        });
-    });
-    
+
     // usercount event
     socket.on("update usercount", () => {
         io.sockets.emit("update usercount", clientCount);
@@ -41,7 +34,19 @@ io.sockets.on("connection", (socket) => {
 
     // chat event
     socket.on("chat message", function(msg, user) {
-        io.emit('chat message', user + ": " + msg);
+        io.emit("chat message", user + ": " + msg);
+        googleTTS(msg, "en", 1)
+        .then(function(url) {
+            // io.emit("speak", url);
+            // console.log("played " + url)
+            player.play(url, function(err){
+                if (err) throw err;
+            });
+        })
+        .catch(function(err) {
+            console.error(err.stack);
+        });
+
     });
 
     // disconnect event

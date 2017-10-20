@@ -18,7 +18,8 @@
     <script>
         $(() => {
             var socket = io.connect();
-            
+            var listening = false;
+
             // when user submits chat message
             $("form").submit(() => {
                 socket.emit("speak", $("#m").val(), username); // tts event
@@ -27,16 +28,33 @@
                 return false;
             });
 
+            $("#toggle-sound").click(() => {
+                console.log("Listening: " + listening);
+                if (listening === false) {
+                    listening = true;
+                    $("#toggle-sound").html("Mute sound");
+                } else {
+                    listening = false;
+                    $("#toggle-sound").html("Hear sound");
+
+                }
+            });
+
             // usercount event
             socket.on("update usercount", (num) => {
                 $("#currentUsers").html(num);
             });
-            
+
             // chat event
             socket.on("chat message", function(msg) {
                 $("#messages").append($("<li>").text(msg));
             });
-            
+
+            // socket.on("speak", function(url) {
+            //    var sound = new Audio(url + ".mp3");
+            //    sound.play();
+            // });
+
             // tell server to update all usercounts
             socket.emit("update usercount");
 
@@ -49,6 +67,8 @@
     <div id="users">
         <p>Users online: <span id="currentUsers"></span></p>
     </div>
+
+    <button id="toggle-sound">Hear sound</button>
 
     <ul id="messages"></ul>
     <form action="">
