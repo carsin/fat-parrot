@@ -13,7 +13,7 @@ const http = require("http").Server(app);
 const socketio = require("socket.io");
 const io = socketio(http);
 
-var clientCount = 0; // count of users online
+var clientCount = 0; // users online
 
 // render index ejs page
 app.get("/", (req, res) => {
