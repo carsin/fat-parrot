@@ -20,8 +20,6 @@
   "dependencies": {
     "ejs": "^2.5.7",
     "express": "^4.16.2",
-    "google-tts-api": "0.0.2",
-    "play-sound": "^1.1.1",
     "say": "^0.13.1",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3"

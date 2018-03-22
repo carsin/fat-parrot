@@ -1,6 +1,3 @@
-// TTS
-// const say = require("say");
-
 // Express
 const express = require("express");
 const app = express();
@@ -10,6 +7,9 @@ const http = require("http").Server(app);
 // Socket.io
 const socketio = require("socket.io");
 const io = socketio(http);
+
+// TTS
+const say = require("say");
 
 var clientCount = 0; // count of users online
 
@@ -33,6 +33,7 @@ io.sockets.on("connection", (socket) => {
     // chat event
     socket.on("chat message", function(msg, user) {
         io.emit("chat message", user + ": " + msg);
+        say.speak(msg);
     });
 
     // disconnect event
