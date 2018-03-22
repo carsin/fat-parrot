@@ -1,7 +1,5 @@
 // TTS
 // const say = require("say");
-var googleTTS = require("google-tts-api");
-var player = require("play-sound")(opts = {})
 
 // Express
 const express = require("express");
@@ -13,7 +11,7 @@ const http = require("http").Server(app);
 const socketio = require("socket.io");
 const io = socketio(http);
 
-var clientCount = 0; // users online
+var clientCount = 0; // count of users online
 
 // render index ejs page
 app.get("/", (req, res) => {
@@ -35,18 +33,6 @@ io.sockets.on("connection", (socket) => {
     // chat event
     socket.on("chat message", function(msg, user) {
         io.emit("chat message", user + ": " + msg);
-        googleTTS(msg, "en", 1)
-        .then(function(url) {
-            // io.emit("speak", url);
-            // console.log("played " + url)
-            player.play(url, function(err){
-                if (err) throw err;
-            });
-        })
-        .catch(function(err) {
-            console.error(err.stack);
-        });
-
     });
 
     // disconnect event
